@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
-}
+} 
 bootstrap();
 // kreiranje Nest aplikacije : cmd => nest new <ime aplikacije>
 // pokretanje aplikacije, imamo sve u package.json  fajlu i to u odeljku script{}, sa tim samo pozovemo: npm run <naziv indexa iz skripte>

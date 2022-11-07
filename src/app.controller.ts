@@ -11,4 +11,9 @@ export class AppController {
   getWorld(): string {
     return 'World!';
   }
+  @Get('srbia')
+  getSrbija(): string {
+    return 'Srbija';
+  }
+
 }
