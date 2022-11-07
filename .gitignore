@@ -33,3 +33,6 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# .fajlovi koje ne zelimo u commit-u
+.env 
