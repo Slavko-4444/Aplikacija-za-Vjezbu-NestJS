@@ -15,6 +15,7 @@ bootstrap();
 // za rad sa git-om, inicijalizujemo ga 
 // cmd> git init
 // sa komandom git add . 
+// ako hocemo da jedan branch spojimo sa drugim moramo da budemo u taj branch kom hocemo da dodamo taj drugi u koji smo radili promjene
 // u git repository-umu dodajemo sve iz trenutnog root dira (C:\Users\Korisnik\Nest\aplikacija(root)\)
 // ali jos nisu predati (commit-ovani), vec su prebaceni u master grani( cmd> git status)
 
