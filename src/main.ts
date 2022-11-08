@@ -7,7 +7,7 @@ async function bootstrap() {
 } 
 bootstrap();
 // kreiranje Nest aplikacije : cmd => nest new <ime aplikacije>
-// pokretanje aplikacije, imamo sve u package.json  fajlu i to u odeljku script{}, sa tim samo pozovemo: npm run <naziv indexa iz skripte>
+// pokretanje aplikacije, imamo sve u package.json  fajlu i to u odeljku script{}, sa tim samo pozovemo: npm run <naziv indexa iz skripte(start:dev npr.)>
 
 // .gitignore -> ovo je dir koji sadrzi podatke koji su sve moduli i podaci koji se ne prate
 
@@ -23,3 +23,16 @@ bootstrap();
 
 //cmd> git config --global user.email "sosicslavko8@gmail.com"
 //cmd> git config --global user.name "Slavko Sosic"
+
+// pregled svih commit-a 
+// cmd> git log
+//--------------------------------------------------------------------------------------------------------------
+//pravimo granu (branch), a prvo se vec nalazimo u branch master, sve promjene koje smo commit-ovail
+//u jednom branch-u, nece biti i u onom koji je prije nje...
+//cmd> git branch  <ime grane>
+
+//pregled dostupnih grana
+//cmd> git branch -l
+
+// prelazak iz trenutnog u sledeci branch
+//cmd> git checkout <ime branch-a koji hocemo da posjetimo>
