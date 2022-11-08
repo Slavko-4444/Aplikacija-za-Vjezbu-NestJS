@@ -5,11 +5,9 @@ import { AdministratorService } from './services/administrator/administrator.ser
 
 @Controller()
 export class AppController {
-
   constructor(
     private administratorService: AdministratorService
-  ) { }
-
+  ){  }
   @Get() //http://loalhost:3000/
   getHello(): string {
     return 'Hello';
