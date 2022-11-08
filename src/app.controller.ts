@@ -5,11 +5,9 @@ import { AdministratorService } from './services/administrator/administrator.ser
 
 @Controller()
 export class AppController {
-
   constructor(
     private administratorService: AdministratorService
-  ) { }
-
+  ){  }
   @Get() //http://loalhost:3000/
   getHello(): string {
     return 'Hello';
@@ -25,6 +23,6 @@ export class AppController {
 
   @Get('api/administrator') //http://localhost:3000/api/administrator
   getAllAdmins(): Promise<Administrator[]> {
-      return this.administratorService.getAll();
+    return this.administratorService.getAll();
   }
 }
