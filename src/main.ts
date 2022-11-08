@@ -12,9 +12,9 @@ bootstrap();
 // .gitignore -> ovo je dir koji sadrzi podatke koji su sve moduli i podaci koji se ne prate
 
 
-// za rad sa git-om, inicijalizujemo ga 
+// za rad sa git-om, inicijalizujemo ga
 // cmd> git init
-// sa komandom git add . 
+// sa komandom git add .
 // u git repository-umu dodajemo sve iz trenutnog root dira (C:\Users\Korisnik\Nest\aplikacija(root)\)
 // ali jos nisu predati (commit-ovani), vec su prebaceni u master grani( cmd> git status)
 
@@ -24,7 +24,7 @@ bootstrap();
 //cmd> git config --global user.email "sosicslavko8@gmail.com"
 //cmd> git config --global user.name "Slavko Sosic"
 
-// pregled svih commit-a 
+// pregled svih commit-a
 // cmd> git log
 //--------------------------------------------------------------------------------------------------------------
 //pravimo granu (branch), a prvo se vec nalazimo u branch master, sve promjene koje smo commit-ovail
@@ -36,3 +36,17 @@ bootstrap();
 
 // prelazak iz trenutnog u sledeci branch
 //cmd> git checkout <ime branch-a koji hocemo da posjetimo>
+//--------------------------------------------------------------------------------------------------------------
+// za instalaciju paketa za povezivanje sa mysql, sa paketom typorm
+//npm i mysql typeorm @nestjs/typeorm
+/**da bi podesi konekcija, moramo u HeidSQL query => ALTER USER 'USERNAME'@'localhost' 
+ *                                                   IDENTIFIED WITH mysql_native_password
+ *                                                   BY 'password';
+ *                                                    
+ *                                                   FLUSH PRIVILEGES;
+ * 
+ * 
+ * kada napavimo entitete iz baza u novom folderu entities, generisemo u cmd servis i smjestamo ga u folder  koja ce nam omoguciti
+ * da radimo sa tim entitetima:
+ * cmd> nest generate service <administrator-ime service> <ime foldera koji ce se napraviti i u kojem ce se sacuvati servis>
+ */
