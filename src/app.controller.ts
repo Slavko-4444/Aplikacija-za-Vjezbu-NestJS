@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Administrator } from './administrator.entity';
+import { Administrator } from '../entities/administrator.entity';
 import { AdministratorService } from './services/administrator/administrator.service';
 
 

@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';// importovali smo
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfiguration } from 'config/database.configuration';
-import { Administrator } from './administrator.entity';
+import { Administrator } from '../entities/administrator.entity';
 import { AdministratorService } from 'src/services/administrator/administrator.service';
 @Module({
   imports: [
