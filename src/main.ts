@@ -6,6 +6,8 @@ async function bootstrap() {
   await app.listen(3000);
 } 
 bootstrap();
+
+// Predavanje 39.
 // kreiranje Nest aplikacije : cmd => nest new <ime aplikacije>
 // pokretanje aplikacije, imamo sve u package.json  fajlu i to u odeljku script{}, sa tim samo pozovemo: npm run <naziv indexa iz skripte(start:dev npr.)>
 

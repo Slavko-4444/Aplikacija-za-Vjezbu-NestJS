@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity() // neophodno..
 export class Administrator {
-
+    
     @PrimaryGeneratedColumn({name: 'administrator_id', type: 'int', unsigned: true})
     administratorId: number;
 

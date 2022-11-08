@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';// importovali smo
-import { DatabaseConfiguration } from 'config/database.configuration';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfiguration } from 'config/database.configuration';
 import { Administrator } from './administrator.entity';
-import { AdministratorService } from './services/administrator/administrator.service';
+import { AdministratorService } from 'src/services/administrator/administrator.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
