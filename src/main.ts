@@ -49,7 +49,16 @@ bootstrap();
  *                                                   FLUSH PRIVILEGES;
  * 
  * 
+ * 
+ * 
+
  * kada napavimo entitete iz baza u novom folderu entities, generisemo u cmd servis i smjestamo ga u folder  koja ce nam omoguciti
  * da radimo sa tim entitetima:
  * cmd> nest generate service <administrator-ime service> <ime foldera koji ce se napraviti i u kojem ce se sacuvati servis>
- */
+ *  
+ * @Predavanje 40
+ * 
+ * instaliramo  generator koji ce nam sluziti za analizu i generisanje entiteta iz baze
+ * cmd> npm i-g typeorm-model-generator
+ * cmd>  typeorm-model-generator -h localhost -e mysql -p 3306 -u aplikacija -x aplikacija -d aplikacija
+*/
