@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';// importovali smo
-import { AppController } from './app.controller';
+import { AppController } from './controllers/app.controller';
 import { DatabaseConfiguration } from 'config/database.configuration';
 import { Administrator } from '../output/entities/administrator.entity';
 import { AdministratorService } from 'src/services/administrator/administrator.service';
@@ -14,6 +14,7 @@ import { Feature } from 'output/entities/feature.entity';
 import { Order } from 'output/entities/order.entity';
 import { Photo } from 'output/entities/photo.entity';
 import { User } from 'output/entities/user.entity';
+import { AdministratorController } from './controllers/api/administrator.controller';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -38,7 +39,7 @@ import { User } from 'output/entities/user.entity';
     }),
     TypeOrmModule.forFeature([ Administrator ])
   ],
-  controllers: [AppController],
+  controllers: [AppController, AdministratorController, ],
   providers: [AdministratorService],
 })
 export class AppModule {}

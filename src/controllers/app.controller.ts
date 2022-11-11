@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { Administrator } from '../output/entities/administrator.entity';
-import { AdministratorService } from './services/administrator/administrator.service';
+import { Administrator } from '../../output/entities/administrator.entity';
+import { AdministratorService } from '../services/administrator/administrator.service';
 
 
 @Controller()
@@ -21,9 +21,9 @@ export class AppController {
     return 'Srbija';
   }
 
-  @Get('api/administrator') //http://localhost:3000/api/administrator
-  getAllAdmins(): Promise<Administrator[]> {
-    return this.administratorService.getAll();
-  }
+  // @Get('api/administrator') //http://localhost:3000/api/administrator
+  // getAllAdmins(): Promise<Administrator[]> {
+  //   return this.administratorService.getAll();
+  // }
   
 }
