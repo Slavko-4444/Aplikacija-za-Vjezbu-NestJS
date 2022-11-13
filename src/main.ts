@@ -60,6 +60,6 @@ bootstrap();
  * @Predavanje 40
  * 
  * instaliramo  generator koji ce nam sluziti za analizu i generisanje entiteta iz baze
- * cmd> npm i-g typeorm-model-generator
+ * cmd> npm i -g typeorm-model-generator
  * cmd>  typeorm-model-generator -h localhost -e mysql -p 3306 -u aplikacija -x aplikacija -d aplikacija
 */
