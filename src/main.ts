@@ -62,4 +62,17 @@ bootstrap();
  * instaliramo  generator koji ce nam sluziti za analizu i generisanje entiteta iz baze
  * cmd> npm i -g typeorm-model-generator
  * cmd>  typeorm-model-generator -h localhost -e mysql -p 3306 -u aplikacija -x aplikacija -d aplikacija
+ * 
+ * @Predavanje 43
+ * 
+ *CRUD - omogucava automacku implementaciju odredjenih ruta u controller fajlovima
+ * 
+ * za instalaciju CRUD-a:
+ * cmd>npm i @nestjsx/crud @nestjsx/crud-typeorm @nestjsx/crud-request
+ * -> da bismo mogli pokrenuti aplikaciju neophodan je class-transformer paket
+ * cmd>npm i class-transformer 
+ * 
+ * Za podkategorije:
+ * http://localhost:3000/api/category/?join=categories
+ * 
 */

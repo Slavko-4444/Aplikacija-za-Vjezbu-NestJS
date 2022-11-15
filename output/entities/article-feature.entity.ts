@@ -9,10 +9,10 @@ import {
 import { Article } from "./article.entity";
 import { Feature } from "./feature.entity";
 
-@Index("uq_article_feature_article_id_featuer_id", ["articleId", "featuerId"], {
+@Index("uq_article_feature_article_id_feature_id", ["articleId", "featureId"], {
   unique: true,
 })
-@Index("fk_article_feature_feature_id", ["featuerId"], {})
+@Index("fk_article_feature_feature_id", ["featureId"], {})
 @Entity("article_feature")
 export class ArticleFeature {
   @PrimaryGeneratedColumn({
@@ -25,8 +25,8 @@ export class ArticleFeature {
   @Column({type:"int",  name: "article_id", unsigned: true})
   articleId: number;
 
-  @Column({ type:"int", name: "featuer_id", unsigned: true})
-  featuerId: number;
+  @Column({ type:"int", name: "feature_id", unsigned: true})
+  featureId: number;
 
   @Column({type:"varchar", length: 255 })
   value: string;
@@ -42,6 +42,6 @@ export class ArticleFeature {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
-  @JoinColumn([{ name: "featuer_id", referencedColumnName: "featureId" }])
-  featuer: Feature;
+  @JoinColumn([{ name: "feature_id", referencedColumnName: "featureId" }])
+  feature: Feature;
 }
