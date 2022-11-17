@@ -41,7 +41,7 @@ import { ArticleService } from './services/article/article.service';
         User  
       ]
     }),
-    TypeOrmModule.forFeature([ Administrator, Category, Article, ])
+    TypeOrmModule.forFeature([ Administrator, Category, Article, ArticleFeature, ArticlePrice]) 
   ],
   controllers: [ AppController, AdministratorController, CategoryController, ArtilceController ],
   providers: [ AdministratorService, CategoryService, ArticleService ],

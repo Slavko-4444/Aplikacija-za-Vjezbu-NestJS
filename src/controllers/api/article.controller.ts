@@ -1,6 +1,8 @@
-import { Controller } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "output/entities/article.entity";
+import { AddArticleDto } from "src/dtos/article/add.article.dto";
+import { ApiResponse } from "src/msci/api.response.class";
 import { ArticleService } from "src/services/article/article.service";
 import { CategoryService } from "src/services/category/category.service";
 
@@ -27,7 +29,11 @@ import { CategoryService } from "src/services/category/category.service";
                 },
                 features: {
                     eager: true
-                }
+                },
+                articlePrices: {
+                    eager: true
+                },
+
             }
         }
     }    
@@ -35,4 +41,9 @@ import { CategoryService } from "src/services/category/category.service";
 export class ArtilceController {
     constructor(public service: ArticleService)
     { }
+    // POST http://localhost:3000:/api/article/fullArticle
+    @Post('fullArticle')
+    createFullArticle(@Body() data: AddArticleDto){
+        return this.service.addFullArticle(data);
+    }
 }

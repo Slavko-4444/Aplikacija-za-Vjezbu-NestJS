@@ -75,4 +75,10 @@ bootstrap();
  * Za podkategorije:
  * http://localhost:3000/api/category/?join=categories
  * 
-*/
+ * 
+ * @Predavanje 44
+ * 
+ * -> Proslijedjivanje vise inforamcija preko jedne rute, za vise entiteta u bazi
+ * 
+ * 
+ * */
