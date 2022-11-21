@@ -80,5 +80,16 @@ bootstrap();
  * 
  * -> Proslijedjivanje vise inforamcija preko jedne rute, za vise entiteta u bazi
  * 
+ * @Predavanje 45
+ * 
+ * -> Token i JSONWebToken 
+ *
+ * u auth.controller.ts fajlu radimo kodiranje same logike programa, gdje nam je neophodan i modul jsnowebtoken:
+ * cmd> npm i jsonwebtoken
+ * 
+ * 
+ * @Predavanje 46 
+ * 
+ * Kreiramo middleware : authorization.middlewares.ts fajl
  * 
  * */

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';// importovali smo
 import { AppController } from './controllers/app.controller';
 import { DatabaseConfiguration } from 'config/database.configuration';
@@ -19,6 +19,8 @@ import { CategoryService } from './services/category/category.service';
 import { CategoryController } from './controllers/api/category.controller';
 import { ArtilceController } from './controllers/api/article.controller';
 import { ArticleService } from './services/article/article.service';
+import { AuthController } from './controllers/api/auth.controller';
+import { AuthMiddleware } from './middleware/authorization.middlewares';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -43,7 +45,19 @@ import { ArticleService } from './services/article/article.service';
     }),
     TypeOrmModule.forFeature([ Administrator, Category, Article, ArticleFeature, ArticlePrice]) 
   ],
-  controllers: [ AppController, AdministratorController, CategoryController, ArtilceController ],
-  providers: [ AdministratorService, CategoryService, ArticleService ],
+  controllers: [ AppController, AdministratorController, CategoryController, ArtilceController, AuthController ],
+  providers: [AdministratorService, CategoryService, ArticleService],
+  exports: [
+    AdministratorService, //ovo je prevashodno za authoMiddleware koji se ne nalazi u okviru ovih modula
+  ]
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude('auth/*')
+      .forRoutes('api/*');
+    
+
+  }
+}

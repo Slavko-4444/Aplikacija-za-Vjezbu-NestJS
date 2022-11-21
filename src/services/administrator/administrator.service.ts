@@ -22,6 +22,17 @@ export class AdministratorService {
         return this.administrator.findOneById(id);  
     }
 
+    async getByUsername(username: string): Promise<Administrator | null> {
+        
+        const admin : Administrator = await this.administrator.findOneBy({
+            username: username
+        });
+         
+        if (admin === undefined)
+            return null;
+        
+        return admin;
+    }
     add(data: AddAdministratotDto): Promise<Administrator | ApiResponse> {
         //DTO -> model
         //username -> username
