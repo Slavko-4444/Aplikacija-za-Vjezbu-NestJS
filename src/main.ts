@@ -92,4 +92,18 @@ bootstrap();
  * 
  * Kreiramo middleware : authorization.middlewares.ts fajl
  * 
+ * @Predavanje 47 : Otpremanje datoteke, photo, rad u articleControler-u i pravljenje Post metode za ucitavanje fotografija...  
+ * za diskStorage moramo da instaliramo multer
+ * cmd>npm i @types/express -D
+ * 
+ * @Predavanje 48: 
+ * 
+ * U fileFilter metodi u aritcle.controller-u redefinisemo callback funkciju tako da ne stampa error poruku u 
+ * sulucaju greske poslatog fajla, vec callback(null, false), i dodajemo @Req req u uploadPhoto() metodu, gdje provjeravamo
+ * da li je req.ErrorHandler (ovaj objekat smo mi dodali i proizvoljno nazvali) postoji i vrati ApiResponse() 
+ * 
+ * @Predavanje 49: 
+ * 
+ * Provjeravamo mimetype poslatog fajla..
+ * 
  * */

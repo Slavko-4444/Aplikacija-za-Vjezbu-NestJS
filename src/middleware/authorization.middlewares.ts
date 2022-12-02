@@ -1,4 +1,3 @@
-
 import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { AdministratorService } from 'src/services/administrator/administrator.service';
@@ -36,7 +35,7 @@ export class AuthMiddleware implements NestMiddleware {
         if (!jwtData)
         throw new HttpException('Bad token found', HttpStatus.UNAUTHORIZED);
         
-        console.log("Ip "+req.ip);
+       // console.log("Ip "+req.ip);
         if (req.ip !== jwtData.ip)
         throw new HttpException('Bad ip address was found', HttpStatus.UNAUTHORIZED);
 
@@ -52,7 +51,7 @@ export class AuthMiddleware implements NestMiddleware {
         if (jwtData.exp <= temporaryTime)
             throw new HttpException('Token has expired!', HttpStatus.UNAUTHORIZED);
         
-        console.log(jwtData); 
+        //console.log(jwtData); 
         next();
     }
 }

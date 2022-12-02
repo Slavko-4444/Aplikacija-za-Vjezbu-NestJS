@@ -21,6 +21,7 @@ import { ArtilceController } from './controllers/api/article.controller';
 import { ArticleService } from './services/article/article.service';
 import { AuthController } from './controllers/api/auth.controller';
 import { AuthMiddleware } from './middleware/authorization.middlewares';
+import { PhotoService } from './services/photoService/photo.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -43,10 +44,21 @@ import { AuthMiddleware } from './middleware/authorization.middlewares';
         User  
       ]
     }),
-    TypeOrmModule.forFeature([ Administrator, Category, Article, ArticleFeature, ArticlePrice]) 
+    TypeOrmModule.forFeature([
+      Administrator,
+      Article,
+      ArticleFeature,
+      ArticlePrice,
+      CartArticle,
+      Cart,
+      Category,
+      Feature,
+      Order,
+      Photo,
+      User ]) 
   ],
   controllers: [ AppController, AdministratorController, CategoryController, ArtilceController, AuthController ],
-  providers: [AdministratorService, CategoryService, ArticleService],
+  providers: [AdministratorService, CategoryService, ArticleService, PhotoService],
   exports: [
     AdministratorService, //ovo je prevashodno za authoMiddleware koji se ne nalazi u okviru ovih modula
   ]
