@@ -1,17 +1,17 @@
 import { Param ,Body, Controller, Post, UseInterceptors, UploadedFile, Req } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
-import { Article } from "output/entities/article.entity";
+import { Article } from "src/output/entities/article.entity";
 import { AddArticleDto } from "src/dtos/article/add.article.dto";
 import { ApiResponse } from "src/msci/api.response.class";
 import { ArticleService } from "src/services/article/article.service";
-import { CategoryService } from "src/services/category/category.service";
 import { diskStorage } from 'multer';
 import { StorageConfiguraion } from "config/storage.config";
-import { Photo } from "output/entities/photo.entity";
+import { Photo } from "src/output/entities/photo.entity";
 import { PhotoService } from "src/services/photoService/photo.service";
-
-
+import * as fileType from 'file-type';
+import * as fs from 'fs';
+import * as sharp from 'sharp';
 
 @Controller('api/article')
 @Crud(
@@ -65,7 +65,8 @@ export class ArtilceController {
         FileInterceptor('photo', {
             // diskStorage importujemo iz multer-a kojeg smo prethodno instalirali: npm i @types/express -D
             storage: diskStorage({
-                destination: StorageConfiguraion.photoDestination,
+
+                destination: StorageConfiguraion.photo.destination,
                 filename: (req, file, callback) => {
                     // ovdje nas ne zanima req, jer se u njemu nalaze podaci za velicinu fajla, podaci korisnika itd..
                     // u ovom polju zanima nas ime fajla i njegova optimizacija:
@@ -93,7 +94,6 @@ export class ArtilceController {
             }),
             fileFilter:(req, file, callback) => {
                 // 1. Provjera extenzije file
-                console.log(file);
                 if (!file.originalname.match(/\.(jpg|png)$/)) {
                     req.ErrorReqHandler = 'Incorrect file extension'; // proizvoljno nazivamo objekat koji dodavamo...
                     callback(null, false); // new Error('Incorrect file extension') smo mogli umjesto null, ali nam error ne treba u konzoli vec povratna informacija...
@@ -111,19 +111,33 @@ export class ArtilceController {
             },
             limits: {
                 files: 1,
-                fileSize: StorageConfiguraion.photoMaxFileSize
+                fileSize: StorageConfiguraion.photo.maxSize
             }
         })
     )
     async uploadPhoto( @Param('id') articleId: number, @UploadedFile() photo, @Req() req): Promise<ApiResponse|Photo> {
 
-        console.log(photo);
-
+      
         if (req.ErrorReqHandler)
             return new ApiResponse('error', -4005, req.ErrorReqHandler);
         
         //real mimetype checkout
+        let FileTypeResult = await fileType.fromFile(photo.path);
+
+        if (!FileTypeResult) {
+            fs.unlinkSync(photo.path); // synchronously remove file
+            return new ApiResponse('error', -453, 'Cannot read the file');
+        }
+
+        if (!(FileTypeResult.mime.includes('jpeg') || FileTypeResult.mime.includes('png'))) {
+            fs.unlinkSync(photo.path);
+            return new ApiResponse('error', -454, 'Unregular mimetype detected');
+        }
+
         // save resized file
+        await this.createResizedImage(photo, StorageConfiguraion.photo.resize.thumb);        
+        await this.createResizedImage(photo, StorageConfiguraion.photo.resize.small);        
+
         
         let newPhoto = new Photo();
         newPhoto.articleId = articleId;
@@ -135,4 +149,18 @@ export class ArtilceController {
         
         return savedPhoto;
     }
+
+    async createResizedImage(photo, resizeSettings) {
+       
+        const destination = resizeSettings.path + "/" + photo.filename;
+
+        await sharp(photo.path).resize({
+            fit: 'contain',
+            background: { r: 255, g: 255, b: 255, alpha: 0.0 },
+            widht: resizeSettings.widht,
+            height: resizeSettings.height
+        }).toFile(destination);
+    }
+
+    
 }

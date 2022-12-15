@@ -105,5 +105,19 @@ bootstrap();
  * @Predavanje 49: 
  * 
  * Provjeravamo mimetype poslatog fajla..
+ * article.controller.ts je u pitanju 
+ * 
+ * radimo :
+ * import * as fs from 'fs';
+ * 
+ * ii instalirali smo stariju verziju file-type : 
+ * cmd> npm i file-type@16.5.3
+ *  
+ * nakon toga radimo resize sacuvanih fotografija, i pravimo dvije metode thumb i small
+ * neophodan module za to je :
+ * 
+ * cmd>npm i sharp 
+ * za promjenu velicine koristimo 
+ * sharp.(filename).resize().toFile()
  * 
  * */

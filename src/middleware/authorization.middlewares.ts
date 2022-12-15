@@ -29,7 +29,7 @@ export class AuthMiddleware implements NestMiddleware {
             jwtData = jwt.verify(token, jwtSecret);
             
         } catch (error) {
-            throw new HttpException("Nekorektan token error massage => "+error, HttpStatus.UNAUTHORIZED);
+            throw new HttpException("Nekorektan token error massage => " + error, HttpStatus.UNAUTHORIZED);
         }
 
         if (!jwtData)
@@ -38,7 +38,7 @@ export class AuthMiddleware implements NestMiddleware {
        // console.log("Ip "+req.ip);
         if (req.ip !== jwtData.ip)
         throw new HttpException('Bad ip address was found', HttpStatus.UNAUTHORIZED);
-
+        
         if (req.headers["user-agent"].toString() !== jwtData.ua)
             throw new HttpException('Bad user-agent was bad', HttpStatus.UNAUTHORIZED);
         

@@ -1,6 +1,6 @@
 import { Controller } from "@nestjs/common";
 import { Crud } from "@nestjsx/crud";
-import { Category } from "output/entities/category.entity";
+import { Category } from "src/output/entities/category.entity";
 import { CategoryService } from "src/services/category/category.service";
 
 
@@ -28,7 +28,7 @@ import { CategoryService } from "src/services/category/category.service";
                 features: {
                     eager: true
                 },
-                articlesx: {
+                articles: {
                     eager: false   
                 }
             }

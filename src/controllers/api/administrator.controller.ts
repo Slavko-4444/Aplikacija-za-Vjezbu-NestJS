@@ -1,5 +1,5 @@
 import { AdministratorService } from "src/services/administrator/administrator.service";
-import { Administrator } from "output/entities/administrator.entity";
+import { Administrator } from "src/output/entities/administrator.entity";
 import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
 import { AddAdministratotDto } from "src/dtos/administrator/add.administrator.dto";
 import { EditAdministrator } from "src/dtos/administrator/edit.administrator.dto";

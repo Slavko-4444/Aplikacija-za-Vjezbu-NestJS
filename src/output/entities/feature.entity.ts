@@ -29,10 +29,6 @@ export class Feature {
   @OneToMany(() => ArticleFeature, (articleFeature) => articleFeature.feature)
   articleFeatures: ArticleFeature[];
 
-  @ManyToOne(() => Category, (category) => category.features, {
-    onDelete: "RESTRICT",
-    onUpdate: "CASCADE",
-  })
   // predavanje 43
   @ManyToMany(type => Article, article => article.features)
   @JoinTable({
@@ -41,7 +37,12 @@ export class Feature {
     inverseJoinColumn: { name: "article_id", referencedColumnName: "articleId" }
   })
   articles: Article[];
+  
 
+  @ManyToOne(() => Category, (category) => category.features, {
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE",
+  })
   @JoinColumn([{ name: "category_id", referencedColumnName: "categoryId" }])
   category: Category;
 }

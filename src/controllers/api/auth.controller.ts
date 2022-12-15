@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req } from "@nestjs/common";
-import { Administrator } from "output/entities/administrator.entity";
+import { Administrator } from "src/output/entities/administrator.entity";
 import { AuthorizationDto } from "src/dtos/authorisation/authorisation.dto";
 import { ApiResponse } from "src/msci/api.response.class";
 import { AdministratorService } from "src/services/administrator/administrator.service";
@@ -58,9 +58,9 @@ export class AuthController {
 
         // pristupamo ip adresi i useragent-u koji se nalaze u request dijelu :
         JwtData.ip = request.ip;
-        console.log("Ip address: " + JwtData.ip);
+        //console.log("Ip address: " + JwtData.ip);
         JwtData.ua = request.headers["user-agent"].toString();
-        console.log("useragent-u: " + JwtData.ua);
+       // console.log("useragent-u: " + JwtData.ua);
 
         // podaci koje smo skupili u JwtData objektu za token nisu i dalje spremni, jer preostaje da ih "potpisemo"
         // nekom nasom secret string informacijom. To radimo putem jwt.sign() metode:
