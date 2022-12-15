@@ -1,4 +1,4 @@
-import { Param ,Body, Controller, Post, UseInterceptors, UploadedFile, Req } from "@nestjs/common";
+import { Param ,Body, Controller, Post, UseInterceptors, UploadedFile, Req, Delete } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "src/output/entities/article.entity";
@@ -162,5 +162,37 @@ export class ArtilceController {
         }).toFile(destination);
     }
 
+
+
+    @Delete(':articleId/DeletePhoto/:photoId')
+    async DeletePhoto(
+        @Param('articleId') articleId: number,
+        @Param('photoId') photoId: number
+    ) {
+
+        let PhotoFounded = await this.photoService.findOne({
+            where : {
+                articleId: articleId,
+                photoId: photoId
+            }
+        });
+        
+        if (!PhotoFounded)
+            return new ApiResponse('error', -4040, 'Photo not founded.');
+        
+        //console.log(PhotoFounded);
+        try {
+            fs.unlinkSync(StorageConfiguraion.photo.destination + PhotoFounded.imagePath)
+            fs.unlinkSync(StorageConfiguraion.photo.resize.thumb.path + '/' + PhotoFounded.imagePath)
+            fs.unlinkSync(StorageConfiguraion.photo.resize.small.path + '/' + PhotoFounded.imagePath)
+        } catch (e) { }
+        
+        // moramo da izbrisemo i iz baze.
+        let numberOfDeleted = await this.photoService.delete(photoId)
+        if (!numberOfDeleted)
+            return new ApiResponse('error', -4041, 'Photo not deleted')
+        
+        return new ApiResponse('success', 0, 'Photo deleted')
+     }
     
 }
