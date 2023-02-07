@@ -1,12 +1,12 @@
 
 export class loginAuthoInfo {
-    administratorId: number;
-    username: string;
+    Id: number;
+    identity: string;
     token: string;
 
-    constructor(id: number, un: string, jwt: string) {
-        this.administratorId = id;
-        this.username = un;
+    constructor(id: number, ident: string, jwt: string) {
+        this.Id = id;
+        this.identity = ident;
         this.token = jwt;
     }
 }

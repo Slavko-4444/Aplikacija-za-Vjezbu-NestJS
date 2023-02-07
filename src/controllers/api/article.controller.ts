@@ -1,4 +1,4 @@
-import { Param ,Body, Controller, Post, UseInterceptors, UploadedFile, Req, Delete } from "@nestjs/common";
+import { Param ,Body, Controller, Post, UseInterceptors, UploadedFile, Req, Delete, Patch } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "src/output/entities/article.entity";
@@ -12,6 +12,7 @@ import { PhotoService } from "src/services/photoService/photo.service";
 import * as fileType from 'file-type';
 import * as fs from 'fs';
 import * as sharp from 'sharp';
+import { EditArticleDto } from "src/dtos/article/edit.article.dtos";
 
 @Controller('api/article')
 @Crud(
@@ -39,10 +40,13 @@ import * as sharp from 'sharp';
                 },
                 articlePrices: {
                     eager: true
-                },
-
+                }
             }
+        },
+        routes: {
+            exclude: ['updateOneBase', 'replaceOneBase', 'deleteOneBase'] // iskljucujemo PATCH rutu koja se po automatizmu generise pute crud-a. Mi zelimo da je predefinisemo
         }
+        
     }    
 )
 export class ArtilceController {
@@ -56,6 +60,13 @@ export class ArtilceController {
     createFullArticle(@Body() data: AddArticleDto){
         return this.service.addFullArticle(data);
     }
+
+    // PATCH http://localhost:3000:/api/article/:id
+    @Patch(':id')
+    EditFullArticle(@Param('id') articleId:number, @Body() data: EditArticleDto) {
+        return this.service.editFullArticle(articleId, data);    
+    }
+
 
     // Radimo uploadovanje fotografija:
     //koristimo @UseInterceptor da presretne datoteku i ispita da li je to ono sto mi ocekujemo da se posalje

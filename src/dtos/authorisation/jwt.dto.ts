@@ -1,6 +1,7 @@
 
-export class JwtDataTransferObject { 
-    administratorId: number; 
+export class JwtDataDto { 
+    role: "administrator" | "user";
+    Id: number; 
     username: string;
     exp: number;
     ip: string;
@@ -8,7 +9,8 @@ export class JwtDataTransferObject {
 
     toPlainObjectJWTdata() {
         return {
-            administratorId: this.administratorId,
+            role: this.role,
+            Id: this.Id,
             username: this.username,
             exp: this.exp,
             ip: this.ip,

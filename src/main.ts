@@ -120,4 +120,35 @@ bootstrap();
  * za promjenu velicine koristimo 
  * sharp.(filename).resize().toFile()
  * 
+ * 
+ * @Predavanje 52
+ * 
+ * pravimo feature.service.ts fajl
+ * pravimo feature.controller.ts fajl
+ * 
+ * u Postman-u pravimo POST i GET metode.
+ * 
+ * @Predavanje 53
+ * 
+ * Brisanje podatak iz article.controller.ts 
+ * Brisemo fotografiju
+ * 
+ * @Predavanje 54
+ * 
+ * editArticle objekat pravimo u dtos(data transfer object-u)
+ * pravmio funkciju za isti objekat u article.service.ts
+ * 
+ * @Predavanje 55
+ *
+ * pravimo u auth.controller.ts novu rutu PUT user/register za registraciju korisnika
+ * pravimo user.service.ts  za rutu
+ * 
+ * pravimo user registration dto za spomenutu rutu
+ * 
+ * 
+ * @Predavanje 57
+ * 
+ * pravimo u auth.controller.ts fajlu jos jednu rutu "login/user"
+ * namjenjenu za logovanje korisnika, i modifikovali smo loginAuthoInfo.dto.ts, zatim dodali smo userService.getByEmail() 
+ *  
  * */

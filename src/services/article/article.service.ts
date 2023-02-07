@@ -7,6 +7,7 @@ import { Article } from "src/output/entities/article.entity";
 import { AddArticleDto } from "src/dtos/article/add.article.dto";
 import { ApiResponse } from "src/msci/api.response.class";
 import { Repository } from "typeorm"
+import { EditArticleDto } from "src/dtos/article/edit.article.dtos";
 
 @Injectable()
 export class ArticleService extends TypeOrmCrudService<Article> {
@@ -58,5 +59,72 @@ export class ArticleService extends TypeOrmCrudService<Article> {
                 articlePrices: true
              } 
         })
+    }
+
+    async editFullArticle(articleId: number, data: EditArticleDto): Promise<Article | ApiResponse> {
+        
+        let existingArticle: Article = await this.article.findOne({
+            where: {
+                articleId: articleId
+            }, relations: {
+                articlePrices: true,
+                articleFeatures: true  
+            }
+        });
+
+        if (!existingArticle)
+            return new ApiResponse('error', -5001, "Uncorrected id. Article not found.");
+        
+    
+        existingArticle.categoryId = data.categoryId;
+        existingArticle.name = data.name;
+        existingArticle.excerpt = data.excerpt;
+        existingArticle.description = data.description;
+        existingArticle.status = data.status;
+        existingArticle.isPromoted = data.isPromoted;
+
+        let savedArticle = await this.article.save(existingArticle);
+        if (!savedArticle)
+            return new ApiResponse('error', -5001, "Article could not be saved.")
+        
+        const newPrice: string = Number(data.price).toFixed(2);// 129.1341 -> "129.13"
+
+        let OldPrice: number = existingArticle.articlePrices[existingArticle.articlePrices.length - 1].price;
+        let OldPriceString: string = Number(OldPrice).toFixed(2);
+        
+        if (newPrice !== OldPriceString)
+        {
+           let  NewArticlePrices = new ArticlePrice();    
+            NewArticlePrices.articleId = articleId;
+            NewArticlePrices.price = data.price;
+
+            let SavedArticlePrice: ArticlePrice = await this.article_Price.save(NewArticlePrices);
+            
+            if (!SavedArticlePrice)
+                return new ApiResponse('error', -5002, "ArticlePrice could not be saved.")
+        }
+
+        if (data.features) {
+            await this.article_Feature.remove(existingArticle.articleFeatures); // brisemo sve articlefeature kako bismo dodali nove
+            
+            for (let feature of data.features) {
+                let articleFeature: ArticleFeature = new ArticleFeature();
+                
+                articleFeature.articleId = articleId;
+                articleFeature.featureId = feature.featureId;
+                articleFeature.value = feature.value;
+    
+                await this.article_Feature.save(articleFeature);
+            }
+        }
+
+        return await this.article.findOne({ 
+            where: { articleId: articleId },
+            relations: {
+                articlePrices: true, 
+                articleFeatures: true  
+            }
+        });
+
     }
 }

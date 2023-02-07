@@ -24,6 +24,7 @@ import { AuthController } from './controllers/api/auth.controller';
 import { AuthMiddleware } from './middleware/authorization.middlewares';
 import { PhotoService } from './services/photoService/photo.service';
 import { FeatureController } from './controllers/api/feature.controler';
+import { UserService } from './services/user/user.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -60,9 +61,10 @@ import { FeatureController } from './controllers/api/feature.controler';
       User ]) 
   ],
   controllers: [ AppController, AdministratorController, CategoryController, ArtilceController, AuthController, FeatureController, ],
-  providers: [AdministratorService, CategoryService, ArticleService, PhotoService, FeatureService,],
+  providers: [AdministratorService, CategoryService, ArticleService, PhotoService, FeatureService, UserService ],
   exports: [
     AdministratorService, //ovo je prevashodno za authoMiddleware koji se ne nalazi u okviru ovih modula
+    UserService
   ]
 })
 export class AppModule implements NestModule {
