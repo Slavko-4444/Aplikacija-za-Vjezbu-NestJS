@@ -1,9 +1,11 @@
 import { AdministratorService } from "src/services/administrator/administrator.service";
 import { Administrator } from "src/output/entities/administrator.entity";
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { AddAdministratotDto } from "src/dtos/administrator/add.administrator.dto";
 import { EditAdministrator } from "src/dtos/administrator/edit.administrator.dto";
 import { ApiResponse } from "src/msci/api.response.class";
+import { AllowToRoles } from "src/msci/allow.to.roles.descriptor";
+import { RoleCheckedGuard } from "src/msci/role.check.guards";
 
 @Controller('api/administrator')
 export class AdministratorController { 
@@ -14,12 +16,16 @@ export class AdministratorController {
     
     // GET http://localhost:3000/api/administrator
     @Get()
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
     getAll(): Promise<Administrator[]> {
         return this.administratorService.getAll();
     }
     
     // GET http://localhost:3000/api/administrator/:id
     @Get(':id')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
     getById(
         @Param('id')
         administratorId: number
@@ -37,6 +43,7 @@ export class AdministratorController {
     //PUT http://localhost:3000/api/administrator
     // anotacija @Body() nam predstavlja podatke iz requset-a klijenta, ili ovdje iz http put metode
     @Put()
+    @AllowToRoles('administrator')
     add(@Body() data: AddAdministratotDto) : Promise<Administrator| ApiResponse> {
         return this.administratorService.add(data);
     }
@@ -44,6 +51,8 @@ export class AdministratorController {
     // POST http://localhost:3000/api/administrator/id
     // koristimo za update podataka u entitetu
     @Post(':id')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
     editById(@Param('id') id: number, @Body() data: EditAdministrator): Promise<Administrator|ApiResponse>{
         return this.administratorService.editById(id, data);
     }

@@ -1,4 +1,4 @@
-import { Param ,Body, Controller, Post, UseInterceptors, UploadedFile, Req, Delete, Patch } from "@nestjs/common";
+import { Param ,Body, Controller, Post, UseInterceptors, UploadedFile, Req, Delete, Patch, UseGuards } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "src/output/entities/article.entity";
@@ -13,6 +13,8 @@ import * as fileType from 'file-type';
 import * as fs from 'fs';
 import * as sharp from 'sharp';
 import { EditArticleDto } from "src/dtos/article/edit.article.dtos";
+import { RoleCheckedGuard } from "src/msci/role.check.guards";
+import { AllowToRoles } from "src/msci/allow.to.roles.descriptor";
 
 @Controller('api/article')
 @Crud(
@@ -57,12 +59,16 @@ export class ArtilceController {
     { }
     // POST http://localhost:3000:/api/article/fullArticle
     @Post('fullArticle')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
     createFullArticle(@Body() data: AddArticleDto){
         return this.service.addFullArticle(data);
     }
 
     // PATCH http://localhost:3000:/api/article/:id
     @Patch(':id')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
     EditFullArticle(@Param('id') articleId:number, @Body() data: EditArticleDto) {
         return this.service.editFullArticle(articleId, data);    
     }
@@ -72,6 +78,8 @@ export class ArtilceController {
     //koristimo @UseInterceptor da presretne datoteku i ispita da li je to ono sto mi ocekujemo da se posalje
     
     @Post(':id/uploadPhoto/')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
     @UseInterceptors(
         FileInterceptor('photo', {
             // diskStorage importujemo iz multer-a kojeg smo prethodno instalirali: npm i @types/express -D
@@ -176,6 +184,8 @@ export class ArtilceController {
 
 
     @Delete(':articleId/DeletePhoto/:photoId')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator')
     async DeletePhoto(
         @Param('articleId') articleId: number,
         @Param('photoId') photoId: number

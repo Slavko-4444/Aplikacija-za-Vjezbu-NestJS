@@ -61,6 +61,8 @@ export class AuthMiddleware implements NestMiddleware {
         if (jwtData.exp <= temporaryTime)
             throw new HttpException('Token has expired!', HttpStatus.UNAUTHORIZED);
         
+        
+        req.token = jwtData; // uz prosirenu http request doveden putem express-a mi proslijedjujemo u roleGuard otpakovan token
         // console.log(jwtData); 
         next();
     }

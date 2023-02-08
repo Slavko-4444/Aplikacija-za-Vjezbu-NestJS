@@ -150,5 +150,16 @@ bootstrap();
  * 
  * pravimo u auth.controller.ts fajlu jos jednu rutu "login/user"
  * namjenjenu za logovanje korisnika, i modifikovali smo loginAuthoInfo.dto.ts, zatim dodali smo userService.getByEmail() 
- *  
+ * 
+ * @Predavanje 58
+ * 
+ * kreiramo RolesGuard sloj koji posle http requesta i middleware-a  dolazi i provjera role, odnosno 
+ * usmjeravamo sta user moze da posjeti sta ne, sta moze administrator sta ne itd...
+ * 
+ * pravimo role.chck.guards.ts fajl sa klasom  CanActivate i dodajemo request express paketu blok sa otpakovanim tokenom.
+ * zatim ispod svake rute dodajemo po jednu anotaciju definisanu u allow.to.role.descriptor.ts fajlu @AllowToRoles
+ * u fajlu role.check.guards.ts pravimo drugu anotaciju.
+ * @UseGuards(RoleCheckedGuard)
+ * @AllowToRoles('administrator')
+ * 
  * */
