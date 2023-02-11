@@ -187,4 +187,10 @@ bootstrap();
  * U main.ts fajlu prosirujemo nest.factory sa <NestExpressAplication> sto ce nam pomoci da definisemo funk app.useStaticAssets()
  * prvi parametar ove funkcije je prava ruta do slike, a drugi parametar predefinisemo kako bi korisnik trebao da je poziva a da nema pristup pravim rutama u localstorage-u
  * 
+ * @Predavanje 61 
+ * 
+ * pravimo Onlie repository na github-u i  putem komande : 
+ * >>git remote add origin https://github.com/Slavko-4444/Aplikacija-za-Vjezbu.git
+ * >>git push -u origin master
+ * 
  * */
