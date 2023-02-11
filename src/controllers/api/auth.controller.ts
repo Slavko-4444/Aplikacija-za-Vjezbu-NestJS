@@ -14,7 +14,8 @@ import { UserRegistrationDto } from "src/dtos/user/user.registration.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/output/entities/user.entity";
 import { UserService } from "src/services/user/user.service";
-import { UseLoginDto } from "src/services/user/user.login.dto";
+import { UseLoginDto } from "src/dtos/user/user.login.dto";
+
 
 @Controller('auth/Administrator')
 export class AuthController {
@@ -146,9 +147,9 @@ export class AuthController {
 
 
 
-    // PUT http://localhost:3000/auth/Administrator/user/registration
-    @Put('user/registration')
-    async Registration(@Body() data: UserRegistrationDto, @Req() request: Request): Promise<User|ApiResponse> {
+    // POST http://localhost:3000/auth/Administrator/user/registration
+    @Post('user/registration')
+    async Registration(@Body() data: UserRegistrationDto, @Req() request: Request): Promise<User | ApiResponse> {
         return await this.userService.register(data);
     }
       

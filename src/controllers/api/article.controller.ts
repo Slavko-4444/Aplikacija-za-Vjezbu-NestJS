@@ -46,7 +46,21 @@ import { AllowToRoles } from "src/msci/allow.to.roles.descriptor";
             }
         },
         routes: {
-            exclude: ['updateOneBase', 'replaceOneBase', 'deleteOneBase'] // iskljucujemo PATCH rutu koja se po automatizmu generise pute crud-a. Mi zelimo da je predefinisemo
+          //  exclude: ['updateOneBase', 'replaceOneBase', 'deleteOneBase'] // iskljucujemo PATCH rutu koja se po automatizmu generise pute crud-a. Mi zelimo da je predefinisemo
+            only: ['getOneBase', 'getManyBase'],
+            getOneBase: {
+                decorators: [
+                    UseGuards(RoleCheckedGuard),
+                    AllowToRoles('administrator', 'user')
+                ]
+            },
+            getManyBase: {
+                
+                decorators: [
+                    UseGuards(RoleCheckedGuard),
+                    AllowToRoles('administrator', 'user')
+                ]
+            }
         }
         
     }    
@@ -57,8 +71,8 @@ export class ArtilceController {
         public photoService: PhotoService
     )
     { }
-    // POST http://localhost:3000:/api/article/fullArticle
-    @Post('fullArticle')
+    // POST http://localhost:3000:/api/article/
+    @Post()
     @UseGuards(RoleCheckedGuard)
     @AllowToRoles('administrator')
     createFullArticle(@Body() data: AddArticleDto){
