@@ -1,10 +1,21 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { StorageConfiguraion } from 'config/storage.config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useStaticAssets(StorageConfiguraion.photo.destination, {
+    prefix: StorageConfiguraion.photo.urlPrefix,
+    maxAge: StorageConfiguraion.photo.maxAge, // 7 dana. ovo se koristi za kesiranje, kod ucitavanja slika gdje ce se iz kes memorije reloadovati ista fotografija racunajuci da se nije mijenjala u bazi (ili brisala)
+    index: false,// indexsiranje nije moguce. npr za poziv https://localhost:3000/assets/photos/image.jpg ce se prikazati ali ne i ->https://localhost:3000/assets/photos/ gdje se trazi prikaz svega sto je u nasem storage-u
+  });
+
   await app.listen(3000);
   console.log("Listening port 3000");
+
 } 
 bootstrap();
 
@@ -161,5 +172,19 @@ bootstrap();
  * u fajlu role.check.guards.ts pravimo drugu anotaciju.
  * @UseGuards(RoleCheckedGuard)
  * @AllowToRoles('administrator')
+ * 
+ * @Predavanje 59 
+ * 
+ * U svim kontrolerima prvojeravamo jesu li pozivan @Crud(), gdje u sklopu routes:{} definisemo koji descriptori se koriste za rutiranje.
+ * Deskriptore smo napravili u 58 predavanju kao role guard anotacije koje i ovdje pozivamo u fomi metode.
+ * (article controller, category controler, feature controller...)
+ * 
+ * @Predavanje 60
+ * 
+ * Poziv i uzimanje slike iz baze
+ * Pravimo u StorageConfigu urlPrefix,
+ * 
+ * U main.ts fajlu prosirujemo nest.factory sa <NestExpressAplication> sto ce nam pomoci da definisemo funk app.useStaticAssets()
+ * prvi parametar ove funkcije je prava ruta do slike, a drugi parametar predefinisemo kako bi korisnik trebao da je poziva a da nema pristup pravim rutama u localstorage-u
  * 
  * */
