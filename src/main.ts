@@ -191,6 +191,17 @@ bootstrap();
  * 
  * pravimo Onlie repository na github-u i  putem komande : 
  * >>git remote add origin https://github.com/Slavko-4444/Aplikacija-za-Vjezbu.git
- * >>git push -u origin master
+ * >>git push -u origin master 
+ * 
+ * @Predavanje 62
+ * 
+ * pravimo cart.service.ts i definisemo niz metoda za dodavanje u korpu
+ * pravimo user.cart.controller.ts kojim pozivamo metode iz servica
+ * 
+ * 
+ * @Predavanje 63
+ * 
+ * pravmio order.service.ts i dodajemo addOrder POST metodu u user.cart.controller.ts fajl
+ * 
  * 
  * */

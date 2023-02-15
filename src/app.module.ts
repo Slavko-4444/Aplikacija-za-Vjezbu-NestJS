@@ -25,6 +25,9 @@ import { AuthMiddleware } from './middleware/authorization.middlewares';
 import { PhotoService } from './services/photoService/photo.service';
 import { FeatureController } from './controllers/api/feature.controler';
 import { UserService } from './services/user/user.service';
+import { CartService } from './services/cart/cart.service';
+import { UserCartController } from './controllers/api/user.cart.controller';
+import { OrderService } from './services/order/order.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -60,8 +63,8 @@ import { UserService } from './services/user/user.service';
       Photo,
       User ]) 
   ],
-  controllers: [ AppController, AdministratorController, CategoryController, ArtilceController, AuthController, FeatureController, ],
-  providers: [AdministratorService, CategoryService, ArticleService, PhotoService, FeatureService, UserService ],
+  controllers: [ AppController, AdministratorController, CategoryController, ArtilceController, AuthController, FeatureController, UserCartController ],
+  providers: [AdministratorService, CategoryService, ArticleService, PhotoService, FeatureService, UserService, CartService, OrderService ],
   exports: [
     AdministratorService, //ovo je prevashodno za authoMiddleware koji se ne nalazi u okviru ovih modula
     UserService
