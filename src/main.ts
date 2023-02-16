@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { StorageConfiguraion } from 'config/storage.config';
@@ -12,6 +13,8 @@ async function bootstrap() {
     maxAge: StorageConfiguraion.photo.maxAge, // 7 dana. ovo se koristi za kesiranje, kod ucitavanja slika gdje ce se iz kes memorije reloadovati ista fotografija racunajuci da se nije mijenjala u bazi (ili brisala)
     index: false,// indexsiranje nije moguce. npr za poziv https://localhost:3000/assets/photos/image.jpg ce se prikazati ali ne i ->https://localhost:3000/assets/photos/ gdje se trazi prikaz svega sto je u nasem storage-u
   });
+
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(3000);
   console.log("Listening port 3000");
@@ -203,5 +206,16 @@ bootstrap();
  * 
  * pravmio order.service.ts i dodajemo addOrder POST metodu u user.cart.controller.ts fajl
  * 
+ * @Predavanje 64
+ * 
+ * instaliramo class validator
+ * >>npm i class-validator
+ * 
+ * u main.ts definisemo  app.useGlobalPipes(new ValidationPipe()); i time smo obezbjedili globalni pipline
+ * 
+ * Zatim u svakom od entiteta radimo importovanje Validator-a iz class-validation skupa i pozivamo anotacije @Validation() redom sa 
+ * odredjenim metodam kao sto su : IsNotEmpty(), IsString(), Length(min, max)... itd.
+ * To presretanje podataka radimo i u okviru DataTransferObjekata za svaki ponaosob, i to identicno kao u entitetima. Pri pozivu metode
+ * @Validator.IsEnum(ArticleStatus)  proslijedili smo ArticleStatus enum koji smo definisali u okviru types foldera
  * 
  * */
