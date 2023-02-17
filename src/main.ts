@@ -218,4 +218,23 @@ bootstrap();
  * To presretanje podataka radimo i u okviru DataTransferObjekata za svaki ponaosob, i to identicno kao u entitetima. Pri pozivu metode
  * @Validator.IsEnum(ArticleStatus)  proslijedili smo ArticleStatus enum koji smo definisali u okviru types foldera
  * 
+ * 
+ * @Predavanje 65
+ * 
+ * Pretraga po filterima, obavaljamo tako sto definisemo key filter(sort, join, or, limit, offset..) u request-u i saljemo ga preko Postman-a u poglavlju Params ; Key: filter - value : (categoryId||$eq||5)
+ * Takav jedan filter nam daje odgovarajuce rezultate, i mozemo koristiti samo kod crud metoda(tamo gdje smo ih generisali) 
+ * link : https://github.com/nestjsx/crud/wiki/Requests#filter
+ * poziv izgleda:
+ * http://localhost:3000/api/article/?filter=categoryId||$eq||5 
+ * http://localhost:3000/api/article/?filter=categoryId||$eq||5&sort=name,ASC
+ * 
+ * Mi cemo pored ovih filtera raditi i nesto slozenije
+ * U okviru data transfer objekata pravimo novu klasu ArticleSearchDto 
+ * 
+ *  @Predavanje 66
+ * 
+ * 
+ * U ovom nastavljamo sa pravljenje pretrage po filterima.
+ * U articleServic-u pravimo novi metod koji ce da obradjuje DTO ArticleSearchDto.
+ * 
  * */
