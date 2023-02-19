@@ -235,6 +235,25 @@ bootstrap();
  * 
  * 
  * U ovom nastavljamo sa pravljenje pretrage po filterima.
- * U articleServic-u pravimo novi metod koji ce da obradjuje DTO ArticleSearchDto.
+ * U articleServic-u pravimo novi metod search koji ce da obradjuje DTO ArticleSearchDto.
+ * dodajemo isti i u controler articleController
+ *
+ * @Predavanje 67
  * 
- * */
+ * Slanje elektronske poste kada se poruci porudzbina...  To radimo u UserController-u u metodi makeOrder()
+ * U okviru njega pravimo OrderMailerService.ts
+ * Da bi spremili metodu u service-u instaliramo paket za slanje mejlova:
+ * >>npm install --save @nestjs-modules/mailer nodemailer
+ * >>npm install --save handlebars
+ * U okviru ovog modula imamo MailService koji pozivamo u OrederMailerService-u
+ * 
+ * U appModule-u pored ostalih modula, definisemo i MailerModule za Root  
+ * 
+ * Pravimo MailConfig
+ * 
+ * @Predavanje 68
+ * 
+ * 
+ * 
+ * 
+**/

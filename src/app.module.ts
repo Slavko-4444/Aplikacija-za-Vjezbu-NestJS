@@ -28,6 +28,10 @@ import { UserService } from './services/user/user.service';
 import { CartService } from './services/cart/cart.service';
 import { UserCartController } from './controllers/api/user.cart.controller';
 import { OrderService } from './services/order/order.service';
+import { MailerModule } from '@nestjs-modules/mailer'
+import { MailConfig } from 'config/mail.config';
+import { OrderMailerService } from './services/order/order.mailer.service';
+import { AdministratorOrderController } from './controllers/api/administrator.order.controller';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -61,10 +65,22 @@ import { OrderService } from './services/order/order.service';
       Feature,
       Order,
       Photo,
-      User ]) 
+      User]),
+    MailerModule.forRoot({
+      //smtps://user@domain.com:pass@smtp.domain.com
+     // transport: 'smtps://' + MailConfig.username + ':' + MailConfig.password + '@' + MailConfig.hostname,
+      transport: {
+        host: MailConfig.hostname,
+        auth: {
+          user: MailConfig.username,
+          pass: MailConfig.password,
+        }
+      }
+    }),
+    
   ],
-  controllers: [ AppController, AdministratorController, CategoryController, ArtilceController, AuthController, FeatureController, UserCartController ],
-  providers: [AdministratorService, CategoryService, ArticleService, PhotoService, FeatureService, UserService, CartService, OrderService ],
+  controllers: [ AppController, AdministratorController, CategoryController, ArtilceController, AuthController, FeatureController, UserCartController, AdministratorOrderController ],
+  providers: [AdministratorService, CategoryService, ArticleService, PhotoService, FeatureService, UserService, CartService, OrderService, OrderMailerService ],
   exports: [
     AdministratorService, //ovo je prevashodno za authoMiddleware koji se ne nalazi u okviru ovih modula
     UserService

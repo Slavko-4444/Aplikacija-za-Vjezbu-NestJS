@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { OrderStatusDto } from "src/dtos/order/order.dto";
 import { ApiResponse } from "src/msci/api.response.class";
 import { Cart } from "src/output/entities/cart.entity";
 import { Order } from "src/output/entities/order.entity";
@@ -38,8 +39,13 @@ export class OrderService {
         NewOrder.cartId = cartId;
         const savedOrder = await this.order.save(NewOrder);
     
+        return await this.getById(savedOrder.orderId);
+    }
+
+
+    async getById(orderId: number): Promise<Order> {
         return await this.order.findOne({
-            where: { orderId: savedOrder.orderId },
+            where: { orderId: orderId },
             relations: [
                 "cart",
                 "cart.user",
@@ -48,6 +54,18 @@ export class OrderService {
                 "cart.cartArticles.article.category",
                 "cart.cartArticles.article.articlePrices"
             ]
-        })
+        });
+    }
+
+    async cahngeStatus(orderId: number, data: OrderStatusDto): Promise<Order | ApiResponse> {
+       
+        const changingOrder: Order = await this.getById(orderId);
+       
+        if (!changingOrder)
+            return new ApiResponse('error', -9001, 'The such order is not found!');
+
+        changingOrder.status = data.status;
+
+        return await this.order.save(changingOrder);
     }
 }

@@ -36,3 +36,4 @@ lerna-debug.log*
 
 # .fajlovi koje ne zelimo u commit-u
 .env 
+mail.config.ts
