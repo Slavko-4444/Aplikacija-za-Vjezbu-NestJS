@@ -6,12 +6,16 @@ import { ApiResponse } from "src/msci/api.response.class";
 import { User } from "src/output/entities/user.entity";
 import { Repository } from "typeorm";
 import * as crypto from "crypto";
+import { UserToken } from "src/output/entities/user-token.entity";
 
 
 @Injectable()
 export class UserService extends TypeOrmCrudService<User>{
 
-    constructor(@InjectRepository(User) private readonly service: Repository<User>) {
+    constructor(
+        @InjectRepository(User) private readonly service: Repository<User>,
+        @InjectRepository(UserToken) private readonly userToken: Repository<UserToken>
+    ) {
         super(service);
     }
 
@@ -55,6 +59,47 @@ export class UserService extends TypeOrmCrudService<User>{
             return null;
         
         return user;
+    }
+
+
+    async addToken(userId: number, token: string, expiresAt: string) : Promise<UserToken>{
+        
+        const userToken = new UserToken();
+
+        userToken.userId = userId;
+        userToken.token = token;
+        userToken.expiresAt = expiresAt;
+        
+        return await this.userToken.save(userToken);
+    }
+
+
+    async  getUserToken(token: string): Promise<UserToken>{
+
+        return await this.userToken.findOne({where:{token: token}})
+    }
+
+    async invalidateToken(token: string): Promise<UserToken | ApiResponse>{
+
+        const tempUserToken: UserToken = await this.getUserToken(token);
+
+        if (!tempUserToken)
+            return new ApiResponse('error', -10001, 'No such refresh token found');
+
+        tempUserToken.isValid = 0;
+
+        return await this.userToken.save(tempUserToken);
+    }
+
+    async invalidateUserTokens(userId: number): Promise<(UserToken | ApiResponse)[]> {
+
+        const userTokens = await this.userToken.find({where:{userId: userId}});
+
+        const results = []
+        for (const usToken of userTokens)
+            results.push( await this.invalidateToken(usToken.token));
+
+        return results;
     }
 }
 

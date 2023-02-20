@@ -1,5 +1,5 @@
 
-export class JwtDataDto { 
+export class JwtRefreshData { 
     role: "administrator" | "user";
     Id: number; 
     identity: string;
@@ -7,11 +7,11 @@ export class JwtDataDto {
     ip: string;
     ua: string;
 
-    toPlainObjectJWTdata() {
+    toPlainObjectJWTRefreshdata() {
         return {
             role: this.role,
             Id: this.Id,
-            username: this.identity,
+            identity: this.identity,
             exp: this.exp,
             ip: this.ip,
             ua: this.ua

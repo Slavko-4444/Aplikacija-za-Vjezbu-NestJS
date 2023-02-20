@@ -253,7 +253,12 @@ bootstrap();
  * 
  * @Predavanje 68
  * 
+ * Pravimo amdinistrator.order.controller i u orderService pravimo metode za GET order, i PATCH order...
  * 
+ * @Predavanje 69
+ * 
+ * 
+ 
  * 
  * 
 **/
