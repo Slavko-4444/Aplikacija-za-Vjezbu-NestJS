@@ -16,6 +16,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  // dodajemo enable cores za api
+  app.enableCors()
+
   await app.listen(3000);
   console.log("Listening port 3000");
 
@@ -257,7 +260,8 @@ bootstrap();
  * 
  * @Predavanje 69
  * 
- * 
+ * Pravimo refreshToken, i dodajemo entitet iz baze UserToken u kome cuvamo korisnicke refresh tokene
+ * Dodajemo novi post metod za refreshovanje tokena
  
  * 
  * 

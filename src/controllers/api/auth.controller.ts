@@ -83,12 +83,12 @@ export class AuthController {
         return new Promise(resolve => { resolve(responseObject)});
     }
 
-    //POST http://localhost:3000/auth/Administrator/login/user
+    //POST http://localhost:3000 
     @Post('login/user')
     async doLoginUser(@Body() data: UseLoginDto, @Req() request:Request): Promise<loginAuthoInfo| ApiResponse> {
         
         const user: User = await this.userService.getByEmail(data.email);
-        
+            
         // provjera za username:
         if (user === null)
             return new Promise(resolve => resolve(new ApiResponse('error', -3001, 'Greska sa datim username-om')));

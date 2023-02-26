@@ -40,7 +40,7 @@ export class UserService extends TypeOrmCrudService<User>{
            let SavedUser: User = await this.service.save(NewUser);
            return SavedUser;
         } catch (error) { 
-           return new ApiResponse(error.message, -707, 'New user account cannot be saved!');
+           return new ApiResponse(error.message, -6000, 'New user account cannot be saved!');
        }
     }    
     

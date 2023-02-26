@@ -14,10 +14,6 @@ export class UserRegistrationDto {
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(6, 40)
-    @Validator.Matches(/^.{7, 128}$/, {
-        message: 'Lozinka nije dovoljne duzine '
-    })
-
     password: string;
 
     @Validator.IsNotEmpty()
