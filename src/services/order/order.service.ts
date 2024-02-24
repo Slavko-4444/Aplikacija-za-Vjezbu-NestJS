@@ -37,8 +37,11 @@ export class OrderService {
         
         const NewOrder: Order = new Order();
         NewOrder.cartId = cartId;
+        NewOrder.userId = cart.userId;
         const savedOrder = await this.order.save(NewOrder);
     
+        cart.createdAt = new Date();
+        await this.cart.save(cart);
         return await this.getById(savedOrder.orderId);
     }
 
@@ -67,5 +70,23 @@ export class OrderService {
         changingOrder.status = data.status;
 
         return await this.order.save(changingOrder);
+    }
+
+    async getAllById(userId: number): Promise<Order[]> {
+
+       
+        return await this.order.find({
+            where: {
+                userId: userId,
+            },
+            relations: [
+                "cart",
+                "cart.user",
+                "cart.cartArticles",
+                "cart.cartArticles.article",
+                "cart.cartArticles.article.category",
+                "cart.cartArticles.article.articlePrices",
+            ],
+        });
     }
 }

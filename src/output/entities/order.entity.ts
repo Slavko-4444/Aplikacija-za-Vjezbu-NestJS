@@ -41,6 +41,14 @@ export class Order {
   @Validator.IsEnum(OrderStatus)
   status: "pending" | "rejected" | "accepted" | "shipped";
 
+  @Column({
+    type: "int",
+    name: "user_id",
+    unique: true,
+    unsigned: true
+  })
+  userId: number;
+
   @OneToOne(() => Cart, (cart) => cart.order, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",

@@ -16,6 +16,8 @@ import { UseLoginDto } from "src/dtos/user/user.login.dto";
 import { JwtRefreshData } from "src/dtos/authorisation/jwt.refresh.dto";
 import { UserRefreshTokenDto } from "src/dtos/authorisation/user.refresh.token.dto";
 import { UserToken } from "src/output/entities/user-token.entity";
+import { AdministratorToken } from "src/output/entities/administrator-token.entity";
+import { AdministratorRefreshTokenDto } from "src/dtos/authorisation/administrator.refresh.token.dto";
 
 @Controller('auth/Administrator')
 export class AuthController {
@@ -49,7 +51,7 @@ export class AuthController {
          * username
          * TOKEN    (JWT JSONwebTOKEN)
          * token = JSON{ adminId, username, exp, ip, ua}, exp - datum isteka, ua - trenutni useragent
-         * moramo instalirati jsonwebtoken
+         * moramo instalirati   
          * 
          * */
         const JwtData = new JwtDataDto();
@@ -58,7 +60,7 @@ export class AuthController {
         JwtData.identity = admin.username;
         
      
-        JwtData.exp = this.getDAtePlus(60 * 60 * 24 * 5);//token admina traje 5 dana
+        JwtData.exp = this.getDAtePlus(60 * 5);//token admina traje 5 min
 
         // pristupamo ip adresi i useragent-u koji se nalaze u request dijelu :
         JwtData.ip = request.ip;
@@ -72,16 +74,91 @@ export class AuthController {
         const token: string = jwt.sign(JwtData.toPlainObjectJWTdata(),jwtSecret); // we generate the token...
 
 
+        const jwtRefreshData = new JwtRefreshData();
+
+        jwtRefreshData.Id = JwtData.Id;
+        jwtRefreshData.role = JwtData.role;
+        jwtRefreshData.ip = JwtData.ip;
+        jwtRefreshData.ua = JwtData.ua;
+        jwtRefreshData.identity = JwtData.identity;
+        jwtRefreshData.exp = this.getDAtePlus(60 * 60);//refresh token za 1h
+
+        const refreshToken: string = jwt.sign(jwtRefreshData.toPlainObjectJWTRefreshdata(), jwtSecret);
+
         const responseObject: loginAuthoInfo = new loginAuthoInfo(
             admin.administratorId,
             admin.username,
             token,
-            "",
-            ""
+            refreshToken,
+            this.getIsoDate(jwtRefreshData.exp)
         );
+        
+
+        await this.userService.addToken(
+            admin.administratorId,
+            refreshToken,
+            this.getDataBaseDateFormat(this.getIsoDate(jwtRefreshData.exp))
+        )
         
         return new Promise(resolve => { resolve(responseObject)});
     }
+
+     // POST http://localhost:3000/auth/Administrator/admin/refresh
+     @Post('administrator/refresh')
+     async AdminTokenRefresh(@Req() req: Request, @Body() data: AdministratorRefreshTokenDto): Promise<loginAuthoInfo | ApiResponse> {
+         
+         const AdminToken: AdministratorToken = await this.administratorService.getAdministratorToken(data.token)
+ 
+         if (!AdminToken)
+             return new ApiResponse('error', -10004, 'No such refresh token.')
+         
+         if (AdminToken.isValid === 0)
+             return new ApiResponse('error', -10005, 'Refresh token is no  longer valid.')
+             
+         const sada = new Date();
+         const datumIsteka = new Date(AdminToken.expiresAt);
+         
+         if ( datumIsteka.getTime() < sada.getTime())
+             return new ApiResponse('error', -10006, 'Refresh token is expired')
+ 
+         
+         let jwtRefreshData: JwtRefreshData = new JwtRefreshData();
+         // cisto da provjerimo ako je token nekorektan
+         try {
+             jwtRefreshData = jwt.verify(data.token, jwtSecret);
+             
+         } catch (error) {
+             throw new HttpException("Nekorektan token error massage => " + error, HttpStatus.UNAUTHORIZED);
+         }
+ 
+         if (!jwtRefreshData)
+         throw new HttpException('Bad token found', HttpStatus.UNAUTHORIZED);
+         
+         if (req.ip !== jwtRefreshData.ip)
+         throw new HttpException('Bad ip address was found', HttpStatus.UNAUTHORIZED);
+            
+         if (req.headers["user-agent"].toString() !== jwtRefreshData.ua)
+             throw new HttpException('Bad user-agent was bad', HttpStatus.UNAUTHORIZED);
+      
+         const jwtData: JwtDataDto = new JwtDataDto();
+ 
+         jwtData.Id       = jwtRefreshData.Id;
+         jwtData.role     = jwtRefreshData.role;
+         jwtData.ip       = jwtRefreshData.ip;
+         jwtData.ua       = jwtRefreshData.ua;
+         jwtData.identity = jwtRefreshData.identity;
+         jwtData.exp      = this.getDAtePlus(60 * 5);
+         
+         let NewToken: string = jwt.sign(jwtData.toPlainObjectJWTdata(), jwtSecret);
+ 
+         return new loginAuthoInfo(
+             jwtData.Id,
+             jwtData.identity,
+             NewToken,
+             data.token,
+             this.getIsoDate(jwtRefreshData.exp)
+         );
+     }
 
     //POST http://localhost:3000 
     @Post('login/user')
@@ -141,7 +218,7 @@ export class AuthController {
         jwtRefreshData.ip = JwtData.ip;
         jwtRefreshData.ua = JwtData.ua;
         jwtRefreshData.identity = JwtData.identity;
-        jwtRefreshData.exp = this.getDAtePlus(60 * 60 * 24 * 5);//refresh token za 5 dana
+        jwtRefreshData.exp = this.getDAtePlus(60 * 60);//refresh token za 1h
 
         const refreshToken: string = jwt.sign(jwtRefreshData.toPlainObjectJWTRefreshdata(), jwtSecret);
 
@@ -159,6 +236,7 @@ export class AuthController {
             refreshToken,
             this.getDataBaseDateFormat(this.getIsoDate(jwtRefreshData.exp))
         )
+
         return new Promise(resolve => { resolve(responseObject)});
     }
 
@@ -167,7 +245,7 @@ export class AuthController {
     // POST http://localhost:3000/auth/Administrator/user/registration
     @Post('user/registration')
     async Registration(@Body() data: UserRegistrationDto, @Req() request: Request): Promise<User | ApiResponse> {
-        return await this.userService.register(data);
+        return await this.userService.register(data); 
     }
  
     // POST http://localhost:3000/auth/Administrator/user/refresh
@@ -231,7 +309,9 @@ export class AuthController {
 
 
     private getDAtePlus(numberOfSec: number) {
-        return new Date().getTime() / 1000 + numberOfSec;
+        let now = new Date();
+        now = new Date(now.getTime());
+        return now.getTime() / 1000 + numberOfSec;
     }
 
     private getIsoDate(timestamp: number) {
@@ -245,4 +325,29 @@ export class AuthController {
     private getDataBaseDateFormat(isoFormat: string): string {
         return isoFormat.substr(0, 19).replace('T', ' ');
     }
+
+
+    private  dateToMySqlFormat(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+    private mySqlToDate(mysqlDate) {
+        const dateParts = mysqlDate.split(" ");
+        const date = dateParts[0];
+        const time = dateParts[1];
+        const dateValues = date.split("-");
+        const year = dateValues[0];
+        const month = dateValues[1] - 1;
+        const day = dateValues[2];
+        const timeValues = time.split(":");
+        const hour = timeValues[0];
+        const minute = timeValues[1];
+        const second = timeValues[2];
+        return new Date(year, month, day, hour, minute, second);
+      }
 }

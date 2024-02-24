@@ -47,7 +47,7 @@ export class UserCartController {
         const cart = await this.GetActiveCartForUser(req.token.Id);
         return await this.cartService.addArticleToCart(cart.cartId, data.articleId, data.quantity);
     }
-
+    // PATCH http://localhost:3000/api/user/cart
     @Patch()
     @UseGuards(RoleCheckedGuard)
     @AllowToRoles('user')
@@ -70,4 +70,14 @@ export class UserCartController {
        await this.orderMailer.senderOrderEmail(order);
         return order;
     }
+
+
+    //GET  http://localhost:3000api/user/cart/allOrders
+    @Get('allOrders')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('user')
+    async getOrders(@Req() req: Request): Promise<Order[]>{
+        return await this.orderService.getAllById(req.token.Id);
+    }
+
 }

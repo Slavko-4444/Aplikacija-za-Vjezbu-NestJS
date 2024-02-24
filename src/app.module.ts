@@ -33,6 +33,7 @@ import { MailConfig } from 'config/mail.config';
 import { OrderMailerService } from './services/order/order.mailer.service';
 import { AdministratorOrderController } from './controllers/api/administrator.order.controller';
 import { UserToken } from './output/entities/user-token.entity';
+import { AdministratorToken } from './output/entities/administrator-token.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -53,7 +54,8 @@ import { UserToken } from './output/entities/user-token.entity';
         Order,
         Photo,
         User,  
-        UserToken
+        UserToken,
+        AdministratorToken,
       ]
     }),
     TypeOrmModule.forFeature([
@@ -68,7 +70,8 @@ import { UserToken } from './output/entities/user-token.entity';
       Order,
       Photo,
       User,
-      UserToken
+      UserToken,
+      AdministratorToken,
     ]),
     MailerModule.forRoot({
       //smtps://user@domain.com:pass@smtp.domain.com
@@ -96,7 +99,5 @@ export class AppModule implements NestModule {
       .apply(AuthMiddleware)
       .exclude('auth/*')
       .forRoutes('api/*');
-    
-
   }
 }

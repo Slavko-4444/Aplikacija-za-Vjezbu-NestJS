@@ -22,7 +22,7 @@ import { CategoryService } from "src/services/category/category.service";
         query: {
             join: {
                 categories: {
-                    eager: false
+                    eager: true
                 },
                 parentCategory: {
                     eager: false

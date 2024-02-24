@@ -36,6 +36,8 @@
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^8.5.1",
     "magic-bytes.js": "^1.0.13",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.42",
     "mysql": "^2.18.1",
     "nodemailer": "^6.9.1",
     "reflect-metadata": "^0.1.13",

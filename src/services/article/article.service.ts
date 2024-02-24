@@ -15,7 +15,7 @@ export class ArticleService extends TypeOrmCrudService<Article> {
     constructor(
         @InjectRepository(Article) private readonly article: Repository<Article>,
         @InjectRepository(ArticlePrice) private readonly article_Price: Repository<ArticlePrice>,
-        @InjectRepository(ArticleFeature) private readonly article_Feature: Repository<ArticleFeature>
+        @InjectRepository(ArticleFeature) private readonly article_Feature: Repository<ArticleFeature>,
     )
     { 
         super(article);
@@ -31,7 +31,7 @@ export class ArticleService extends TypeOrmCrudService<Article> {
         newArticle.categoryId = data.categoryId;
         newArticle.excerpt    = data.excerpt;
         newArticle.description = data.description;
-
+        
         let savedArticle = await this.article.save(newArticle);
         
         let articlePrice: ArticlePrice = new ArticlePrice();
@@ -45,7 +45,7 @@ export class ArticleService extends TypeOrmCrudService<Article> {
             articleFeature.articleId = savedArticle.articleId;
             articleFeature.featureId = feature.featureId;
             articleFeature.value = feature.value;
-
+            
             await this.article_Feature.save(articleFeature);
         }
 
@@ -129,14 +129,17 @@ export class ArticleService extends TypeOrmCrudService<Article> {
 
     }
 
-    async search(data: ArticleSearchDto): Promise<Article[]> {
+    async search(data: ArticleSearchDto): Promise<Article[]|ApiResponse> {
 
         const builder = await this.article.createQueryBuilder("article"); // pravimo builder upita koji ce raditi nad tabelom article
     
         builder.innerJoinAndSelect('article.articlePrices', 'aP',
-        'aP.createdAt = (SELECT MAX(ap.created_at) FROM article_price AS ap WHERE ap.article_id =  article.article_id)'
-        ); // inner join article.articlePrices as aP
-        builder.leftJoinAndSelect('article.articleFeatures', 'aF')
+            'aP.createdAt = (SELECT MAX(ap.created_at) FROM article_price AS ap WHERE ap.article_id =  article.article_id)')
+        // inner join article.articlePrices as aP
+        
+        builder.leftJoinAndSelect("article.articleFeatures", 'aF');
+        builder.leftJoinAndSelect("article.features", "features");
+        builder.leftJoinAndSelect("article.photos", "photos");
 
         builder.where('article.categoryId = :cId', { cId: data.categoryId });
 
@@ -182,7 +185,7 @@ export class ArticleService extends TypeOrmCrudService<Article> {
 
         if (data.orderDirection)
             orderDirection = data.orderDirection;
-        
+
         builder.orderBy(orderBy, orderDirection);
 
         let page = 0;
@@ -197,17 +200,12 @@ export class ArticleService extends TypeOrmCrudService<Article> {
         builder.skip(page * perPage);
         builder.take(perPage);
 
-        let articleIdes = await (await builder.getMany()).map(article => article.articleId);
+        let articleIdes = await builder.getMany();
 
-        return await this.article.find({
-            where: { articleId: In(articleIdes) },
-            relations: {
-                category : true,
-                articleFeatures: true,
-                features: true,
-                articlePrices: true,
-                photos: true
-             } 
-        })
+        if (articleIdes.length === 0)
+            return new ApiResponse('ok', 0, "No articles for these search parameters.");
+
+        return articleIdes;
     }
+     
 }

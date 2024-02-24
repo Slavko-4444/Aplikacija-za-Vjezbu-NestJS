@@ -87,7 +87,7 @@ export class ArtilceController {
     EditFullArticle(@Param('id') articleId:number, @Body() data: EditArticleDto) {
         return this.service.editFullArticle(articleId, data);    
     }
-
+ 
 
     // Radimo uploadovanje fotografija:
     //koristimo @UseInterceptor da presretne datoteku i ispita da li je to ono sto mi ocekujemo da se posalje
@@ -234,7 +234,7 @@ export class ArtilceController {
     @Post('search')
     @UseGuards(RoleCheckedGuard)
     @AllowToRoles('administrator', 'user')
-    async Search(@Body() data: ArticleSearchDto): Promise<Article[]> {
+    async Search(@Body() data: ArticleSearchDto): Promise<Article[]|ApiResponse> {
         return await this.service.search(data);
     }
     

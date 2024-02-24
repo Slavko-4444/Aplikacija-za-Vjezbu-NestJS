@@ -1,7 +1,9 @@
-import { Controller, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { Crud } from "@nestjsx/crud";
+import DisinctFeatureValuesDto from "src/dtos/features/distinct.feature.values.dto";
 import { AllowToRoles } from "src/msci/allow.to.roles.descriptor";
 import { RoleCheckedGuard } from "src/msci/role.check.guards";
+import { Category } from "src/output/entities/category.entity";
 import { Feature } from "src/output/entities/feature.entity";
 import { FeatureService } from "src/services/feature/feature.service";
 
@@ -70,4 +72,11 @@ import { FeatureService } from "src/services/feature/feature.service";
 export class FeatureController { 
     constructor(private service: FeatureService) { }
     
+
+    @Get('values/:categoryId')
+    @UseGuards(RoleCheckedGuard)
+    @AllowToRoles('administrator', 'user')
+    async getDistinctValuesByCategoryId(@Param('categoryId') CategoryId: number): Promise<DisinctFeatureValuesDto> {
+        return await this.service.getDistinctValByCatId(CategoryId);
+    }
 }

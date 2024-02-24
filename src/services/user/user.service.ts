@@ -7,6 +7,7 @@ import { User } from "src/output/entities/user.entity";
 import { Repository } from "typeorm";
 import * as crypto from "crypto";
 import { UserToken } from "src/output/entities/user-token.entity";
+import { resolve } from "path";
 
 
 @Injectable()
@@ -35,15 +36,14 @@ export class UserService extends TypeOrmCrudService<User>{
        NewUser.postalAddress = data.postalAddress;
 
 
-       try {
-           
-           let SavedUser: User = await this.service.save(NewUser);
-           return SavedUser;
-        } catch (error) { 
-           return new ApiResponse(error.message, -6000, 'New user account cannot be saved!');
-       }
+       return new Promise(async resolve => {
+           await this.service.save(NewUser).then((response) => resolve(response))
+           .catch(err => resolve(new ApiResponse(err.message, -6000, 'New user account cannot be saved!')))
+            
+       });
     }    
     
+
     getById(id: number):Promise<User> {
         return this.service.findOneById(id);  
     }

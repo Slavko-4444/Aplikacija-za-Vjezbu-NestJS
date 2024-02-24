@@ -14,7 +14,7 @@ export class ArticleSearchDto {
 
     @Validator.IsOptional() // moze i ne mora da bude setovano..
     @Validator.IsString()
-    @Validator.Length(3, 20)
+    @Validator.Length(0, 20)
     keywords: string;   // po njemu cemo raditi pretragu u okviru 3 polja : name, excerpt, description
 
 

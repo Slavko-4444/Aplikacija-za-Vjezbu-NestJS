@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useStaticAssets(StorageConfiguraion.photo.destination, {
     prefix: StorageConfiguraion.photo.urlPrefix,
     maxAge: StorageConfiguraion.photo.maxAge, // 7 dana. ovo se koristi za kesiranje, kod ucitavanja slika gdje ce se iz kes memorije reloadovati ista fotografija racunajuci da se nije mijenjala u bazi (ili brisala)
-    index: false,// indexsiranje nije moguce. npr za poziv https://localhost:3000/assets/photos/image.jpg ce se prikazati ali ne i ->https://localhost:3000/assets/photos/ gdje se trazi prikaz svega sto je u nasem storage-u
+    index: false, // indexsiranje nije moguce. npr za poziv https://localhost:3000/assets/photos/image.jpg ce se prikazati ali ne i ->https://localhost:3000/assets/photos/ gdje se trazi prikaz svega sto je u nasem storage-u
   });
 
   app.useGlobalPipes(new ValidationPipe());
@@ -21,11 +21,13 @@ async function bootstrap() {
 
   await app.listen(3000);
   console.log("Listening port 3000");
-
-} 
+}
 bootstrap();
 
+
 // Predavanje 39.
+// instaliramo nestjs ->
+//cmd>npm i -g @nestjs/cli
 // kreiranje Nest aplikacije : cmd => nest new <ime aplikacije>
 // pokretanje aplikacije, imamo sve u package.json  fajlu i to u odeljku script{}, sa tim samo pozovemo: npm run <naziv indexa iz skripte(start:dev npr.)>
 
@@ -79,6 +81,7 @@ bootstrap();
  * instaliramo  generator koji ce nam sluziti za analizu i generisanje entiteta iz baze
  * cmd> npm i -g typeorm-model-generator
  * cmd>  typeorm-model-generator -h localhost -e mysql -p 3306 -u aplikacija -x aplikacija -d aplikacija
+ * 
  * 
  * @Predavanje 43
  * 
@@ -171,7 +174,7 @@ bootstrap();
  * @Predavanje 58
  * 
  * kreiramo RolesGuard sloj koji posle http requesta i middleware-a  dolazi i provjera role, odnosno 
- * usmjeravamo sta user moze da posjeti sta ne, sta moze administrator sta ne itd...
+ * usmjeravamo sta user moze da posjeti, sta ne; sta moze administrator, sta ne itd...
  * 
  * pravimo role.chck.guards.ts fajl sa klasom  CanActivate i dodajemo request express paketu blok sa otpakovanim tokenom.
  * zatim ispod svake rute dodajemo po jednu anotaciju definisanu u allow.to.role.descriptor.ts fajlu @AllowToRoles
